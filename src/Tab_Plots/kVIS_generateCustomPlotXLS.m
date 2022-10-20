@@ -232,7 +232,11 @@ for plotDefRowNo = 1:size(plotDef, 1)
     if ~isnan(plotDef{plotDefRowNo,fcnHandle})
 
         try
-            [yp, xp2, plotFcnColors] = feval(plotDef{plotDefRowNo,fcnHandle}, yp, fds{fdsIndex}, pts, plotDef{plotDefRowNo,fcnChannel});
+            [fdsIndexNew] = strsplit(plotDef{plotDefRowNo,fcnChannel},':');
+            plotDef{plotDefRowNo,fcnChannel} = fdsIndexNew{2};
+            fdsIndexNew = str2double(fdsIndexNew{1});
+            pts_new = find(fds{1, 2}.fdata{7, 3}(:,1) > lims(1) & fds{1, 2}.fdata{7, 3}(:,1) < lims(2));
+            [yp, xp2, plotFcnColors] = feval(plotDef{plotDefRowNo,fcnHandle}, yp, fds{fdsIndex}, pts, plotDef{plotDefRowNo,fcnChannel}, fds{fdsIndexNew}, pts_new);            
             if ~isempty(xp2)
                 xp = xp2;
                 xMeta.texName = 'frequency \; [Hz]';
